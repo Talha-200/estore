@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Patient Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../static/patientPortal.css" />
+
+ 
+
+
+</head>
+<body>
+
+    
+      
+    <div class="logo-header">
+      <img src="../static/imgs/BRAINIC-BG.png" alt="">
+      
+    </div>
+    
+  
+
+  <div class="dashboard">
+
+
+    <aside class="sidebar">
+      <div class="welcome-card">
+        <h2>Hello <span>Patient</span>,</h2>
+        <p>Have a nice day and don't forget to take care of your health!</p>
+
+       <div class="welcome-image">
+    <img src="../static/imgs/p1.png" alt="Patient Image">
+  </div>
+
+
+      </div>
+      <div class="card-row">
+        <button class="card blue" onclick="window.location.href='/appointmentForm.html'">Get Appointment</button>
+        <div class="card green">Chat with Doctor</div>
+
+        
+        <div class="card light">Reports</div>
+      </div>
+      <div class="section">
+        <h3>Results</h3>
+        <table class="results-table">
+          <thead><tr><th>#</th><th>Date</th><th>Type</th><th>Status</th></tr></thead>
+          <tbody><tr><td>1</td><td>---</td><td>---</td><td>---</td></tr></tbody>
+        </table>
+      </div>
+      <div class="card feedback">FEEDBACK</div>
+      <div class="card faq">VIEW FAQ’s</div>
+    </aside>
+
+
+
+    <main class="main-panel">
+  <div class="main-dashboard-card">
+    <div class="profile-card merged-card-section">
+      <img src="../static/imgs/icon2.png" alt="Profile" />
+      <p class="name">Patient</p>
+      <p class="details">25 years old<br>Lahore, Pakistan</p>
+    </div>
+
+    <div class="calendar merged-card-section">
+      <div class="calendar-header">
+        <h4>March</h4>
+        <a href="#">+ Add reminder</a>
+      </div>
+      <div class="calendar-days">
+        <p class="weekdays">Mon Tue Wed Thu Fri Sat Sun</p>
+        <p class="days">9 10 <strong class="active">11</strong> 12 13 14 15</p>
+      </div>
+    </div>
+
+
+
+
+    <div class="appointments merged-card-section">
+  <h4>Appointments</h4>
+  <div id="appointmentList">Loading appointments...</div>
+</div>
+
+<script>
+  const userEmail = localStorage.getItem("userEmail");
+  console.log("👤 Logged-in userEmail from localStorage:", userEmail);
+
+  if (!userEmail) {
+    document.getElementById("appointmentList").innerHTML = "<div>User not logged in</div>";
+    throw new Error("User email not found in localStorage");
+  }
+
+  fetch(`http://localhost:3000/getAppointments/${userEmail}`)
+    .then(res => res.json())
+    .then(data => {
+      const listDiv = document.getElementById("appointmentList");
+      listDiv.innerHTML = "";
+
+      if (data.length === 0) {
+        listDiv.innerHTML = "<div>No appointments yet.</div>";
+      } else {
+        data.forEach(app => {
+          const date = new Date(app.appointment_date).toDateString();
+          listDiv.innerHTML += `
+            <div class="appointment">
+              Appointment<br><small>${date}</small>
+            </div>`;
+        });
+      }
+    })
+    .catch(err => {
+      console.error('❌ Error loading appointments:', err);
+      document.getElementById("appointmentList").innerHTML = "Error loading appointments";
+    });
+</script>
+
+
+
+
+
+    <div class="query merged-card-section">
+      <h4>Ask Queries</h4>
+      <button class="chat-btn">Chat with Us</button>
+    </div>
+  </div>
+
+  <a href="#" class="logout">Log out</a>
+</main>
+
+  </div>
+
+
+
+
+
+
+  
+</body>
+</html>
