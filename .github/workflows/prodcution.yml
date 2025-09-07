@@ -1,0 +1,19 @@
+name: Production Deployment
+
+on:
+  push:
+    branches:
+      - production
+  pull_request:
+    branches:
+      - production
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Dummy build
+        run: echo "Deploying to Production environment..."
